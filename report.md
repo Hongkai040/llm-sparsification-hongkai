@@ -27,7 +27,7 @@ There are two conclusions:
 * Most parameters are close to 0
 * The parameter distribution of each layer is similar to the overall distribution, but higher layers tend to deviate from this pattern. 
 
-![vis_all_params_GPT2-medium_sparsity_0%](/figs/vis_all_params_GPT2-medium_sparsity_0%.png)
+![vis_all_params_GPT2-medium_sparsity_0%](https://github.com/Hongkai040/llm-sparsification-hongkai/blob/master/figs/vis_all_params_GPT2-medium_sparsity_0%.png)
 
 ## Model Sparsification & Sizes
 
