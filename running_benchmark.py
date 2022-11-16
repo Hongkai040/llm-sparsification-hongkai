@@ -80,7 +80,7 @@ def run_benchmarks(models, sparsity, tokenizers, model_names):
           model.config.pad_token_id = model.config.eos_token_id
 
         train_dataset = tokenized_datasets["train"].shuffle(seed= 42).select(range(5000))
-        eval_dataset = tokenized_datasets["validation"].shuffle(seed= 42).select(range(1000))
+        eval_dataset = tokenized_datasets["validation"].shuffle(seed= 42).select(range(800))
         training_args = TrainingArguments(output_dir=f"{os.getcwd()}/training/{model_name}_{task}_sparsity_{sparsity[idx]*100}_output", 
                                     num_train_epochs=1,
                                     per_device_train_batch_size=32,
@@ -129,15 +129,15 @@ def run_benchmarks(models, sparsity, tokenizers, model_names):
 if __name__ == "__main__":
     model_names = ['GPT2-medium', 'BART-large', 'BERT-large']
     tokenizers_address = ['gpt2-medium', 'facebook/bart-large', "bert-large-cased"]
-    sparsity = [0, 0.1, 0.5, 0.9, 0.95, 0.99] 
-    # sparsity = [0.5] 
+    # sparsity = [0, 0.1, 0.5, 0.9, 0.95, 0.99] 
+    sparsity = [0.5] 
 
     models = dict()
     tokenizers = dict()
     for model_name, tokenizer_add in zip(model_names, tokenizers_address):
-    tokenizers[model_name] = tokenizer_add
-    models[model_name] = []
-    for prune_proportion in sparsity:
-        models[model_name].append(f'/home/hongkai/DLS/results/models/{model_name}_sparsity_{prune_proportion*100}')
+        tokenizers[model_name] = tokenizer_add
+        models[model_name] = []
+        for prune_proportion in sparsity:
+            models[model_name].append(f'/home/hongkai/DLS/results/models/{model_name}_sparsity_{prune_proportion*100}')
 
     run_benchmarks(models, sparsity, tokenizers, model_names)
