@@ -22,7 +22,7 @@ def run_benchmarks(models, sparsity, tokenizers, model_names):
   # from https://ifwind.github.io/2021/08/31/BERT实战——（7）生成任务-语言模型/#调用分词器对所有的文本分词
   # for  CLM
   def group_texts(examples):
-    block_size = 256
+    block_size = 128
     concatenated_examples = {k: sum(examples[k], []) for k in examples.keys()}
     total_length = len(concatenated_examples[list(examples.keys())[0]])
     total_length = (total_length // block_size) * block_size
@@ -42,7 +42,7 @@ def run_benchmarks(models, sparsity, tokenizers, model_names):
     return tokenizer(examples["question"], 
                      examples["sentence"],
                      padding="max_length",
-                     max_length=256, 
+                     max_length=128, 
                      truncation=True)
   
   # for GLUE 
