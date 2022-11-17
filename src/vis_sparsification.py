@@ -18,7 +18,7 @@ import time
 
 def get_params_plot(model, model_name, sparsity=0):
   # get params dist.
-  fig, ax = plt.subplots(figsize=(12,8))
+  fig, ax = plt.subplots(figsize=(18,8))
   total_param = torch.cat([params.flatten() for params in model.parameters()]).detach().numpy()
   hist, bins = np.histogram(total_param, bins = np.linspace(-1,1,201)) 
   ax.plot(bins[:-1],hist) 
@@ -29,19 +29,29 @@ def get_params_plot(model, model_name, sparsity=0):
   plt.savefig('{}/figs/vis_all_params_{}_sparsity_{}%.png'.format(os.getcwd(), model_name, sparsity*100))
   
   # get params dist. in each layer
+  idx = 0 
+  fig, ax = plt.subplots(figsize=(18,8))
   for elem in model.named_children():
     if elem[0] in ['h', 'encoder', 'decoder']: 
-      fig, ax = plt.subplots(figsize=(12,8))
-      for idx, child in enumerate(elem[1].named_children()):
-        layer_param = torch.cat([params.flatten() for params in child[1].parameters()]).detach().numpy()
-        hist, bins = np.histogram(layer_param, bins = np.linspace(-1,1,201)) 
-        ax.plot(bins[:-1],hist,label="{} hidden layer".format(idx)) 
-      plt.xlabel("Weight values")
-      plt.ylabel("Log Count")
-      plt.yscale('log')
-      plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-      plt.title("distribution of weights across layers(model:{}, sparsity:{}%)".format(model_name, sparsity*100), fontsize=25)
-      plt.savefig('{}/figs/vis_layers_params_{}_sparsity_{}%.png'.format(os.getcwd(), model_name, sparsity*100))
+      for child in elem[1].named_children():
+        if child[0] == 'layers' or child[0] == 'layer': # meaning it's BART or BERT
+          for layer in child[1]:
+            layer_param = torch.cat([params.flatten() for params in layer.parameters()]).detach().numpy()
+            hist, bins = np.histogram(layer_param, bins = np.linspace(-1,1,201)) 
+            ax.plot(bins[:-1],hist,label="hidden layer {}".format(idx)) 
+            idx += 1
+        else:
+          layer_param = torch.cat([params.flatten() for params in child[1].parameters()]).detach().numpy()
+          hist, bins = np.histogram(layer_param, bins = np.linspace(-1,1,201)) 
+          ax.plot(bins[:-1],hist,label="hidden layer {}".format(idx)) 
+          idx += 1
+        
+  plt.xlabel("Weight values")
+  plt.ylabel("Log Count")
+  plt.yscale('log')
+  plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+  plt.title("distribution of weights across layers(model:{}, sparsity:{}%)".format(model_name, sparsity*100), fontsize=25)
+  plt.savefig('{}/figs/vis_layers_params_{}_sparsity_{}%.png'.format(os.getcwd(), model_name, sparsity*100))
 
 
 def prune_model(model, model_name, prune_portion):

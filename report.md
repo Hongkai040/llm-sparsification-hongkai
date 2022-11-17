@@ -27,11 +27,37 @@ There are two conclusions:
 * Most parameters are close to 0
 * The parameter distribution of each layer is similar to the overall distribution, but higher layers tend to deviate from this pattern. 
 
-![vis_all_params_GPT2-medium_sparsity_0%](https://github.com/Hongkai040/llm-sparsification-hongkai/blob/master/figs/vis_all_params_GPT2-medium_sparsity_0%.png)
+![vis_all_params_GPT2-medium_sparsity_0%](figs/vis_all_params_GPT2-medium_sparsity_0%.png)
+
+![vis_all_params_GPT2-medium_sparsity_0%](figs/vis_layers_params_GPT2-medium_sparsity_0%.png)
+
+![vis_all_params_GPT2-medium_sparsity_0%](figs/vis_all_params_BART-large_sparsity_0%.png)
+
+![vis_all_params_GPT2-medium_sparsity_0%](figs/vis_layers_params_BART-large_sparsity_0%.png)
+
+![vis_all_params_GPT2-medium_sparsity_0%](figs/vis_all_params_BERT-large_sparsity_0%.png)
+
+![vis_all_params_GPT2-medium_sparsity_0%](figs/vis_layers_params_BERT-large_sparsity_0%.png)
 
 ## Model Sparsification & Sizes
 
+I used `L1Unstructured` from pytorch pruning for model sparsification. This method prune weights unstructurally and globally, with a L1 norm. Weights that are close to 0 are more likely to be pruned. See examples below. See more sparsification results in the `figs` folder. 
+
+![vis_all_params_GPT2-medium_sparsity_90.0%](figs/vis_all_params_GPT2-medium_sparsity_90.0%.png)
+
+![vis_layers_params_GPT2-medium_sparsity_90.0%](figs/vis_layers_params_GPT2-medium_sparsity_90.0%.png)
+
+
+
+
+
+
+
+
+
 ## Results on Benchmarks
+
+
 
 
 
